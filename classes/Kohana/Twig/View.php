@@ -50,4 +50,13 @@ class Kohana_Twig_View extends View
 		// Combine local and global data and capture the output
 		return self::capture($this->_file, $this->_data);
 	}
+
+	/**
+	 * @return Twig_Environment
+	 */
+	public static function twig()
+	{
+		return Kohana_Twig::instance()->twig;
+	}
+
 }
