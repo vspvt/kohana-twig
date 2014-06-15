@@ -15,42 +15,27 @@ class Kohana_Twig
 	protected $config;
 
 	/**
-	 * @param null $directorySuffix
-	 *
-	 * @return Twig_Loader_Filesystem
-	 * @throws Kohana_Exception
-	 */
-	public function getLoader($directorySuffix = NULL)
-	{
-		// Array of template locations in cascading filesystem
-		$templatesDir = static::$instance->config->templates_dir;
-		$basePath = $templatesDir;
-		NULL === $directorySuffix or $basePath .= DIRECTORY_SEPARATOR . $directorySuffix;
-
-		$templatePaths = [$basePath];
-		foreach (Kohana::modules() as $modulePath) {
-			$tempPath = $modulePath . $templatesDir;
-			if (is_dir($tempPath)) {
-				$templatePaths[] = $tempPath;
-			}
-		}
-
-		// Create the the loader
-		return new Twig_Loader_Filesystem($templatePaths);
-	}
-
-	/**
-	 * @param null $directorySuffix
-	 *
-	 * @throws Kohana_Exception
 	 * @return Kohana_Twig
 	 */
-	public static function instance($directorySuffix = NULL)
+	public static function instance()
 	{
 		if (!static::$instance) {
 			static::$instance = new self;
 
-			$loader = static::$instance->getLoader($directorySuffix);
+			// Load Twig configuration
+			static::$instance->config = Kohana::$config->load('twig');
+
+			// Array of template locations in cascading filesystem
+			$templatesDir = static::$instance->config->templates_dir;
+			$templatePaths = [APPPATH . $templatesDir];
+			foreach (Kohana::modules() as $modulePath) {
+				$tempPath = $modulePath . $templatesDir;
+				if (is_dir($tempPath)) {
+					$templatePaths[] = $tempPath;
+				}
+			}
+			// Create the the loader
+			$loader = new Twig_Loader_Filesystem($templatePaths);
 
 			// Set up Twig
 			static::$instance->twig = new Twig_Environment($loader, static::$instance->config->environment);
