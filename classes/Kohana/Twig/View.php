@@ -5,15 +5,29 @@
  */
 class Kohana_Twig_View extends View
 {
+	protected static $directorySuffix;
+
 	/**
-	 * @param null  $file
-	 * @param array $data
+	 * @param null        $file
+	 * @param array       $data
+	 * @param string|null $directorySuffix
+	 */
+	function __construct($file = NULL, array $data = NULL, $directorySuffix = NULL)
+	{
+		parent::__construct($file, $data);
+		static::$directorySuffix = $directorySuffix;
+	}
+
+	/**
+	 * @param null        $file
+	 * @param array       $data
+	 * @param string|null $directorySuffix
 	 *
 	 * @return Twig_View
 	 */
-	public static function factory($file = NULL, array $data = NULL)
+	public static function factory($file = NULL, array $data = NULL, $directorySuffix = NULL)
 	{
-		return new Twig_View($file, $data);
+		return new static($file, $data, $directorySuffix);
 	}
 
 	/**
@@ -21,7 +35,7 @@ class Kohana_Twig_View extends View
 	 */
 	public static function twig()
 	{
-		return Kohana_Twig::instance()->twig;
+		return Kohana_Twig::instance(static::$directorySuffix)->twig;
 	}
 
 	/**
