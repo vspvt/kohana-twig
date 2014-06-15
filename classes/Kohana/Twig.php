@@ -35,7 +35,6 @@ class Kohana_Twig
 			}
 		}
 
-		// Create the the loader
 		return new Twig_Loader_Filesystem($templatePaths);
 	}
 
@@ -50,6 +49,10 @@ class Kohana_Twig
 		if (!static::$instance) {
 			static::$instance = new self;
 
+			// Load Twig configuration
+			static::$instance->config = Kohana::$config->load('twig');
+
+			// Create the the loader
 			$loader = static::$instance->getLoader($directorySuffix);
 
 			// Set up Twig
