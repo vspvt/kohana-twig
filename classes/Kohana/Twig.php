@@ -24,7 +24,7 @@ class Kohana_Twig
 	{
 		// Array of template locations in cascading filesystem
 		$templatesDir = static::$instance->config->templates_dir;
-		$basePath = $templatesDir;
+		$basePath = APPPATH . $templatesDir;
 		NULL === $directorySuffix or $basePath .= DIRECTORY_SEPARATOR . $directorySuffix;
 
 		$templatePaths = [$basePath];
